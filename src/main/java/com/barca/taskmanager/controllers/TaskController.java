@@ -23,6 +23,8 @@ import com.barca.taskmanager.services.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+// TODO implement HATEOAS
+
 @RestController("taskController")
 @RequestMapping("/api/tasks")
 @RequiredArgsConstructor

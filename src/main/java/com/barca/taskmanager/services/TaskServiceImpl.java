@@ -26,8 +26,7 @@ public class TaskServiceImpl implements TaskService {
   @Override
   @PreAuthorize("isAuthenticated()")
   public void createTask(String userId, TaskCreationDto dto) {
-    Task task = new Task(null, dto.getContent(), null, userId);
-    taskRepository.save(task);
+    taskRepository.save(Task.of(dto.content(), userId));
   }
 
   @Override

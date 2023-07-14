@@ -2,12 +2,13 @@ package com.barca.taskmanager.services;
 
 import org.springframework.security.core.Authentication;
 
+import com.barca.taskmanager.dtos.JwtDto;
 import com.barca.taskmanager.models.Task;
 import com.barca.taskmanager.security.CustomUserDetails;
 
 public interface AuthService {
 
-  String createToken(Authentication auth);
+  JwtDto createToken(Authentication auth);
 
   CustomUserDetails getUserDetails(Authentication auth);
 

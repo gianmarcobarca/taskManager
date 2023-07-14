@@ -3,10 +3,10 @@ package com.barca.taskmanager.dtos;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Value;
 
-@Data
-public final class UserCreationDto {
+@Value
+public class UserCreationDto {
 
   @NotNull
   @Size(min = 1, max = 50)

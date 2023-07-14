@@ -11,11 +11,12 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
 
 @Document(collection = "users")
-@Data
-public class User {
+@Value
+public class User { // final access will cause performance loss
 
   @Id
   private final String id;
@@ -38,7 +39,7 @@ public class User {
   @NotNull
   private final Set<String> authorities;
 
-  public User( // private access will cause performance loss
+  private User( // private access will cause performance loss
       String id,
       String firstName,
       String lastName,
@@ -54,7 +55,8 @@ public class User {
     this.authorities = authorities;
   }
 
-  public static User of(
+  @Builder
+  private static User of(
       String firstName,
       String lastName,
       String email,

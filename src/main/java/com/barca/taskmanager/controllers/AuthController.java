@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.barca.taskmanager.dtos.JwtDto;
 import com.barca.taskmanager.dtos.UserCreationDto;
 import com.barca.taskmanager.services.AuthService;
 import com.barca.taskmanager.services.UserService;
@@ -24,7 +25,7 @@ public class AuthController {
   private final UserService userService;
 
   @GetMapping("/token")
-  public String getToken(Authentication auth) {
+  public JwtDto getToken(Authentication auth) {
     return authService.createToken(auth);
   }
 

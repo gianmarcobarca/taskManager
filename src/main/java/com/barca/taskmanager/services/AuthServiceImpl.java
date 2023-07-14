@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
+import com.barca.taskmanager.dtos.JwtDto;
 import com.barca.taskmanager.models.Task;
 import com.barca.taskmanager.security.CustomUserDetails;
 
@@ -26,10 +27,10 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   @PreAuthorize("isAuthenticated()")
-  public String createToken(Authentication auth) {
+  public JwtDto createToken(Authentication auth) {
 
     Instant now = Instant.now();
-    long expiry = 3600L;
+    long expiry = 3600L; // 1h
 
     String scope = auth
         .getAuthorities()
@@ -47,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
         .expiresAt(now.plusSeconds(expiry))
         .build();
 
-    return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    return new JwtDto(jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue());
   }
 
   @Override

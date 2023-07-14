@@ -9,10 +9,11 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Value;
 
 @Document(collection = "tasks")
-@Data
+@Value
 public class Task {
 
   @Id
@@ -27,4 +28,16 @@ public class Task {
   @NotNull
   private final String userId;
 
+  private Task(String id, String content, Instant createdDate, String userId) {
+    this.id = id;
+    this.content = content.trim();
+    this.createdDate = createdDate;
+    this.userId = userId;
+  }
+
+  @Builder
+  public static Task of(String content, String userId) {
+    return new Task(null, content, null, userId);
+
+  }
 }

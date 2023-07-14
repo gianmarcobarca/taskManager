@@ -29,11 +29,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
   @Override
   @PreAuthorize("permitAll()")
   public void createUser(UserCreationDto dto) {
-    User copy = User.of(
-        dto.getFirstName(),
-        dto.getLastName(),
-        dto.getEmail(),
-        authService.encodePassword(dto.getPassword()));
+
+    var copy = User
+        .builder()
+        .firstName(dto.getFirstName())
+        .lastName(dto.getLastName())
+        .email(dto.getEmail())
+        .password(authService.encodePassword(dto.getPassword()))
+        .build();
 
     userRepository.save(copy);
   }
