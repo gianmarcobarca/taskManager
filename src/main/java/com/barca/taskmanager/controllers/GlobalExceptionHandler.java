@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
   // TODO: Extend ErrorResponse
+
+  @ExceptionHandler(HttpMessageConversionException.class)
+  public ProblemDetail handleMessageConverterException(HttpMessageConversionException e) {
+    return ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+  }
 
   @ExceptionHandler(DataIntegrityViolationException.class)
   public ProblemDetail handleDataIntegrityViolationException(DataIntegrityViolationException e) {
@@ -28,11 +33,6 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(NoSuchElementException.class)
   public ProblemDetail handleNoSuchElementException(NoSuchElementException e) {
     return ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
-  }
-
-  @ExceptionHandler(AccessDeniedException.class)
-  public ProblemDetail handleAccessDeniedException(AccessDeniedException e) {
-    return ProblemDetail.forStatus(HttpStatus.FORBIDDEN);
   }
 
   @ExceptionHandler(Exception.class)

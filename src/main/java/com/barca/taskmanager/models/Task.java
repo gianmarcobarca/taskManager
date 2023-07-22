@@ -28,7 +28,7 @@ public class Task {
   @NotNull
   private final String userId;
 
-  private Task(String id, String content, Instant createdDate, String userId) {
+  public Task(String id, String content, Instant createdDate, String userId) {
     this.id = id;
     this.content = content.trim();
     this.createdDate = createdDate;

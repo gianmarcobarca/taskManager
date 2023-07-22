@@ -1,5 +1,7 @@
 package com.barca.taskmanager.dtos;
 
-public record TaskDto(String id, String content) {
+import java.time.Instant;
+
+public record TaskDto(String id, String content, Instant createdDate) {
 
 }

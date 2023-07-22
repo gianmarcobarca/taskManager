@@ -2,6 +2,7 @@ package com.barca.taskmanager.services;
 
 import java.util.Optional;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 public class TaskServiceImpl implements TaskService {
 
   private final TaskRepository taskRepository;
-  private final AuthService authService;
 
   @Override
   @PreAuthorize("isAuthenticated()")
@@ -42,7 +42,9 @@ public class TaskServiceImpl implements TaskService {
     Optional<Task> result = taskRepository.findById(taskId);
     Task task = result.orElseThrow();
 
-    authService.checkTaskUserId(userId, task);
+    if (!(userId.equals(task.getUserId()))) {
+      throw new DataIntegrityViolationException("Invalid user ID");
+    }
     taskRepository.deleteById(taskId);
   }
 

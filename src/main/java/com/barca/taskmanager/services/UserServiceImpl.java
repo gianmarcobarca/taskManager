@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     var copy = User
         .builder()
-        .firstName(dto.getFirstName())
+        .firstName("")
         .lastName(dto.getLastName())
         .email(dto.getEmail())
         .password(authService.encodePassword(dto.getPassword()))

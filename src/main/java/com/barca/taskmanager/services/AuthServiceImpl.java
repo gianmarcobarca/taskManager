@@ -40,8 +40,8 @@ public class AuthServiceImpl implements AuthService {
 
     JwtClaimsSet claims = JwtClaimsSet
         .builder()
-        .subject(getUserDetails(auth).getId())
-        .claim("name", getUserDetails(auth).getName())
+        .subject(((CustomUserDetails) auth.getPrincipal()).getId())
+        .claim("name", ((CustomUserDetails) auth.getPrincipal()).getName())
         .claim("scope", scope)
         .issuer("self")
         .issuedAt(now)
@@ -54,11 +54,6 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public String encodePassword(String password) {
     return passwordEncoder.encode(password);
-  }
-
-  @Override // only for HTTP Basic
-  public CustomUserDetails getUserDetails(Authentication auth) {
-    return (CustomUserDetails) auth.getPrincipal();
   }
 
   @Override
