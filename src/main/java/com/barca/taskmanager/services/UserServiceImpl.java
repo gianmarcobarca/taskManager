@@ -1,9 +1,9 @@
 package com.barca.taskmanager.services;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
   private final UserRepository userRepository;
-  private final AuthService authService;
+  private final PasswordEncoder passwordEncoder;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -27,7 +27,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
   }
 
   @Override
-  @PreAuthorize("permitAll()")
   public void createUser(UserCreationDto dto) {
 
     var copy = User
@@ -35,7 +34,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         .firstName("")
         .lastName(dto.getLastName())
         .email(dto.getEmail())
-        .password(authService.encodePassword(dto.getPassword()))
+        .password(passwordEncoder.encode(dto.getPassword()))
         .build();
 
     userRepository.save(copy);

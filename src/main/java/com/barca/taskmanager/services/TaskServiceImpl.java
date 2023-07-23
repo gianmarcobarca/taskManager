@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,20 +23,16 @@ public class TaskServiceImpl implements TaskService {
   private final TaskRepository taskRepository;
 
   @Override
-  @PreAuthorize("isAuthenticated()")
   public void createTask(String userId, TaskCreationDto dto) {
     taskRepository.save(Task.of(dto.content(), userId));
   }
 
   @Override
-  @PreAuthorize("isAuthenticated()")
-  @Transactional(readOnly = true)
   public Page<TaskDto> getUserTasks(String userId, Pageable pageable) {
     return taskRepository.findAllByUserId(userId, pageable);
   }
 
   @Override
-  @PreAuthorize("isAuthenticated()")
   public void deleteTask(String userId, String taskId) {
     Optional<Task> result = taskRepository.findById(taskId);
     Task task = result.orElseThrow();
@@ -49,7 +44,6 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  @PreAuthorize("isAuthenticated()")
   public void deleteUserTasks(String userId) {
     taskRepository.deleteAllByUserId(userId);
   }

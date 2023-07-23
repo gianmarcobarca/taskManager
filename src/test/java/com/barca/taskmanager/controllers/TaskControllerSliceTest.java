@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -14,23 +15,20 @@ import org.springframework.data.domain.Sort;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConversionException;
-
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.barca.taskmanager.dtos.TaskCreationDto;
 import com.barca.taskmanager.dtos.TaskDto;
 import com.barca.taskmanager.services.TaskService;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import java.time.Instant;
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.doThrow;
@@ -38,9 +36,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.assertj.core.api.Assertions.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-@WebMvcTest(TaskController.class)
+@WebMvcTest(controllers = TaskController.class)
 public class TaskControllerSliceTest {
 
   @Autowired
@@ -71,6 +67,7 @@ public class TaskControllerSliceTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    // TODO add content.string(page), use ObjectMapper for generics
 
     // verify
     verify(taskService).getUserTasks("user", pageable);
@@ -118,14 +115,21 @@ public class TaskControllerSliceTest {
   }
 
   @Test
-  void createTask_with_invalid_body_should_return_400() throws BindException, Exception {
+  void createTask_with_invalid_dto_should_return_400() throws Exception {
 
-    /*
-     * Cannot test MethodArgumentNotValidException in this environment without
-     * without declaring a throws clause on the service method
-     * 
-     * Validation will be tested in integration test
-     */
+    // simulate invalid dto
+    TaskCreationDto dto = new TaskCreationDto("");
+
+    mockMvc
+        .perform(post("/api/tasks")
+            .with(jwt())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(dto)))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(
+            result -> assertThat(result.getResolvedException() instanceof MethodArgumentNotValidException).isTrue());
+
   }
 
   @Test
@@ -138,6 +142,23 @@ public class TaskControllerSliceTest {
         .andExpect(status().isBadRequest())
         .andExpect(
             result -> assertThat(result.getResolvedException() instanceof HttpMessageConversionException).isTrue());
+  }
+
+  @Test
+  void createTask_should_return_500() throws Exception {
+
+    TaskCreationDto dto = new TaskCreationDto("Task example");
+
+    // simulate arbitrary exception
+    doThrow(RuntimeException.class)
+        .when(taskService).createTask("user", dto);
+
+    mockMvc
+        .perform(post("/api/tasks")
+            .with(jwt()) // sub = user, scope = read
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(dto)))
+        .andExpect(status().isInternalServerError());
   }
 
   @Test
@@ -205,7 +226,6 @@ public class TaskControllerSliceTest {
     mockMvc
         .perform(delete("/api/tasks")
             .with(csrf().asHeader()))
-        // .andDo(print())
         .andExpect(status().isUnauthorized());
   }
 

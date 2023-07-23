@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.authorization.AuthorizationEventPublisher;
@@ -50,6 +51,9 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain authFilterChain(HttpSecurity http) throws Exception {
     http.securityMatcher("/auth/**")
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers(HttpMethod.POST, "/auth/signup").permitAll()
+            .requestMatchers(HttpMethod.GET, "/auth/token").authenticated())
         .httpBasic(Customizer.withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
