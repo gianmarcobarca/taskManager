@@ -2,7 +2,6 @@ package com.barca.taskmanager.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,9 +9,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration("securityConfigTest")
-@Profile("test")
-public class SecurityConfigTest {
+@Configuration("authSecurityConfig")
+public class AuthSecurityConfig {
 
   @Bean
   public SecurityFilterChain authFilterChain(HttpSecurity http) throws Exception {

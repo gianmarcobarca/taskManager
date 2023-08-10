@@ -8,24 +8,25 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.barca.taskmanager.repositorites.TaskRepository;
 
-import static org.mockito.BDDMockito.*;
-import static org.assertj.core.api.Assertions.*;
+// import static org.mockito.BDDMockito.*;
+// import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TaskServiceUnitTest {
+class TaskServiceUnitTest {
 
   @Mock
   private TaskRepository taskRepository;
   @InjectMocks
-  private TaskService taskService;
+  private TaskService taskService = new TaskServiceImpl(taskRepository);
 
   @Test
   void testGetUserTasks() {
+    // TODO
   }
 
   @Test
   void testDeleteUserTasks() {
-
+    // TODO
   }
 
 }

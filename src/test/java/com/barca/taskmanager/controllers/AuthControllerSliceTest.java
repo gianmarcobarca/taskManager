@@ -6,18 +6,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import com.barca.taskmanager.TaskmanagerApplication;
-import com.barca.taskmanager.configs.SecurityConfigTest;
+import com.barca.taskmanager.configs.AuthSecurityConfig;
 import com.barca.taskmanager.dtos.JwtDto;
 import com.barca.taskmanager.dtos.UserCreationDto;
 import com.barca.taskmanager.services.AuthService;
@@ -32,10 +30,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.assertj.core.api.Assertions.*;
 
 @WebMvcTest(controllers = AuthController.class)
-@ContextConfiguration(classes = { SecurityConfigTest.class,
-    TaskmanagerApplication.class })
-@ActiveProfiles("test")
-public class AuthControllerSliceTest {
+@Import(AuthSecurityConfig.class)
+class AuthControllerSliceTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -101,8 +97,8 @@ public class AuthControllerSliceTest {
             .content(asJsonString(dto)))
         .andDo(print())
         .andExpect(status().isBadRequest())
-        .andExpect(
-            result -> assertThat(result.getResolvedException() instanceof MethodArgumentNotValidException).isTrue());
+        .andExpect(result -> assertThat(result.getResolvedException())
+            .isInstanceOf(MethodArgumentNotValidException.class));
   }
 
   @Test
@@ -113,8 +109,8 @@ public class AuthControllerSliceTest {
             .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isBadRequest())
-        .andExpect(
-            result -> assertThat(result.getResolvedException() instanceof HttpMessageConversionException).isTrue());
+        .andExpect(result -> assertThat(result.getResolvedException())
+            .isInstanceOf(HttpMessageConversionException.class));
   }
 
   @Test
