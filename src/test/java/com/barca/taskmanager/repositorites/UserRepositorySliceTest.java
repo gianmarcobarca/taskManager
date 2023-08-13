@@ -1,6 +1,6 @@
 package com.barca.taskmanager.repositorites;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Optional;
 
@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.barca.taskmanager.configs.MongoConfig;
 import com.barca.taskmanager.models.User;
+
+// TODO add validation tests
 
 @DataMongoTest()
 @Import({ MongoConfig.class })
@@ -35,11 +37,14 @@ class UserRepositorySliceTest {
         .email("johndoe@example.com")
         .password("encryptedpassword")
         .build();
-
     userRepository.save(user);
+
     Optional<User> result = userRepository.findByEmail("johndoe@example.com");
 
-    assertEquals(true, result.isPresent());
+    assertThat(result)
+        .isPresent()
+        .get()
+        .hasFieldOrPropertyWithValue("email", "johndoe@example.com");
   }
 
   @Test
@@ -47,6 +52,6 @@ class UserRepositorySliceTest {
 
     Optional<User> result = userRepository.findByEmail("johndoe@example.com");
 
-    assertEquals(true, result.isEmpty());
+    assertThat(result).isEmpty();
   }
 }

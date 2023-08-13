@@ -127,8 +127,8 @@ public class TaskControllerSliceTest {
             .content(asJsonString(dto)))
         .andDo(print())
         .andExpect(status().isBadRequest())
-        .andExpect(
-            result -> assertThat(result.getResolvedException() instanceof MethodArgumentNotValidException).isTrue());
+        .andExpect(result -> assertThat(result.getResolvedException())
+            .isInstanceOf(MethodArgumentNotValidException.class));
 
   }
 
@@ -138,10 +138,12 @@ public class TaskControllerSliceTest {
     mockMvc
         .perform(post("/api/tasks")
             .with(jwt()) // sub = user, scope = read
-            .contentType(MediaType.APPLICATION_JSON))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(null)))
         .andExpect(status().isBadRequest())
         .andExpect(
-            result -> assertThat(result.getResolvedException() instanceof HttpMessageConversionException).isTrue());
+            result -> assertThat(result.getResolvedException())
+                .isInstanceOf(HttpMessageConversionException.class));
   }
 
   @Test

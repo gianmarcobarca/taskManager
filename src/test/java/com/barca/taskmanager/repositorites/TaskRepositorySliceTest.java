@@ -1,6 +1,6 @@
 package com.barca.taskmanager.repositorites;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +17,8 @@ import com.barca.taskmanager.configs.MongoConfig;
 import com.barca.taskmanager.dtos.TaskDto;
 import com.barca.taskmanager.models.Task;
 
+// TODO add validation tests
+
 @DataMongoTest()
 @Import({ MongoConfig.class })
 // @ImportAutoConfiguration
@@ -32,7 +34,7 @@ class TaskRepositorySliceTest {
   }
 
   @Test
-  void findAllByUserId_should_find_2_documents() {
+  void findAllByUserId_should_find_2_documents_in_descending_order() {
 
     taskRepository.save(new Task(null, "content example 1", null, "1"));
     taskRepository.save(new Task(null, "content example 2", null, "1"));
@@ -41,9 +43,10 @@ class TaskRepositorySliceTest {
 
     Page<TaskDto> page = taskRepository.findAllByUserId("1", pageable);
 
-    assertEquals(true, page.getSort().isSorted());
-    assertEquals(2, page.getNumberOfElements());
-
+    assertThat(page.getContent())
+        .hasSize(2)
+        .extracting(TaskDto::content)
+        .containsExactly("content example 2", "content example 1");
   }
 
   @Test
@@ -54,7 +57,8 @@ class TaskRepositorySliceTest {
 
     Page<TaskDto> page = taskRepository.findAllByUserId("3", pageable);
 
-    assertEquals(0, page.getNumberOfElements());
+    assertThat(page.getContent())
+        .isEmpty();
   }
 
   @Test
@@ -66,8 +70,10 @@ class TaskRepositorySliceTest {
 
     taskRepository.deleteAllByUserId("1");
 
-    assertEquals(1L, taskRepository.count());
-    // TODO verify document remaining == task userId 2
+    assertThat(taskRepository.findAll())
+        .hasSize(1)
+        .extracting(Task::getContent)
+        .contains("content example 3");
   }
 
   @Test
@@ -78,7 +84,7 @@ class TaskRepositorySliceTest {
 
     taskRepository.deleteAllByUserId("3");
 
-    assertEquals(2L, taskRepository.count());
+    assertThat(taskRepository.findAll())
+        .hasSize(2);
   }
-
 }
