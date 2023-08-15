@@ -12,7 +12,6 @@ import org.springframework.security.authentication.DefaultAuthenticationEventPub
 import org.springframework.security.authorization.AuthorizationEventPublisher;
 import org.springframework.security.authorization.SpringAuthorizationEventPublisher;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -34,18 +33,12 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
 @Configuration("securityConfig")
-@EnableMethodSecurity
 public class TaskSecurityConfig {
-  private final RSAPublicKey PUBLIC_KEY;
-  private final RSAPrivateKey PRIVATE_KEY;
 
-  public TaskSecurityConfig(
-      @Value("${jwt.public.key}") RSAPublicKey publicKey,
-      @Value("${jwt.private.key}") RSAPrivateKey privateKey) {
-
-    this.PUBLIC_KEY = publicKey;
-    this.PRIVATE_KEY = privateKey;
-  }
+  @Value("${jwt.public.key}")
+  private RSAPublicKey PUBLIC_KEY;
+  @Value("${jwt.private.key}")
+  private RSAPrivateKey PRIVATE_KEY;
 
   @Bean
   public SecurityFilterChain taskFilterChain(HttpSecurity http) throws Exception {

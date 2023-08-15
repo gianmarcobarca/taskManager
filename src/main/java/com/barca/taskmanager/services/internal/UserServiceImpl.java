@@ -1,4 +1,4 @@
-package com.barca.taskmanager.services;
+package com.barca.taskmanager.services.internal;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,6 +11,7 @@ import com.barca.taskmanager.dtos.UserCreationDto;
 import com.barca.taskmanager.models.User;
 import com.barca.taskmanager.repositorites.UserRepository;
 import com.barca.taskmanager.security.UserDetailsImpl;
+import com.barca.taskmanager.services.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     var copy = User
         .builder()
-        .firstName("")
+        .firstName(dto.getFirstName())
         .lastName(dto.getLastName())
         .email(dto.getEmail())
         .password(passwordEncoder.encode(dto.getPassword()))

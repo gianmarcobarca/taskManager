@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,6 +20,7 @@ import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import com.barca.taskmanager.configs.TaskSecurityConfig;
 import com.barca.taskmanager.dtos.TaskCreationDto;
 import com.barca.taskmanager.dtos.TaskDto;
 import com.barca.taskmanager.services.TaskService;
@@ -37,6 +40,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.assertj.core.api.Assertions.*;
 
 @WebMvcTest(controllers = TaskController.class)
+@Import(TaskSecurityConfig.class)
 public class TaskControllerSliceTest {
 
   @Autowired
@@ -71,7 +75,6 @@ public class TaskControllerSliceTest {
 
     // verify
     verify(taskService).getUserTasks("user", pageable);
-
   }
 
   @Test
@@ -81,7 +84,6 @@ public class TaskControllerSliceTest {
         .perform(get("/api/tasks"))
         .andDo(print())
         .andExpect(status().isUnauthorized());
-
   }
 
   @Test
@@ -107,7 +109,6 @@ public class TaskControllerSliceTest {
 
     mockMvc
         .perform(post("/api/tasks")
-            .with(csrf().asHeader())
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(dto)))
         .andDo(print())
@@ -178,8 +179,7 @@ public class TaskControllerSliceTest {
   void deleteTask_should_return_401() throws Exception {
 
     mockMvc
-        .perform(delete("/api/tasks/{taskId}", "100")
-            .with(csrf().asHeader()))
+        .perform(delete("/api/tasks/{taskId}", "100"))
         .andExpect(status().isUnauthorized());
   }
 
@@ -226,8 +226,7 @@ public class TaskControllerSliceTest {
   void deleteUserTasks_should_return_401() throws Exception {
 
     mockMvc
-        .perform(delete("/api/tasks")
-            .with(csrf().asHeader()))
+        .perform(delete("/api/tasks"))
         .andExpect(status().isUnauthorized());
   }
 

@@ -15,6 +15,8 @@ public class GlobalExceptionHandler {
 
   // TODO: Extend ErrorResponse
 
+  // TODO: add jakarta.validation.ConstraintViolationException
+
   @ExceptionHandler(HttpMessageConversionException.class)
   public ProblemDetail handleMessageConverterException(HttpMessageConversionException e) {
     return ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);

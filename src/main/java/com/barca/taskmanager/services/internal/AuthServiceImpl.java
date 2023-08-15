@@ -1,4 +1,4 @@
-package com.barca.taskmanager.services;
+package com.barca.taskmanager.services.internal;
 
 import java.time.Instant;
 import java.util.stream.Collectors;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.barca.taskmanager.dtos.JwtDto;
 import com.barca.taskmanager.security.CustomUserDetails;
+import com.barca.taskmanager.services.AuthService;
 
 import lombok.RequiredArgsConstructor;
 

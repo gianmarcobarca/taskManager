@@ -1,4 +1,4 @@
-package com.barca.taskmanager.services;
+package com.barca.taskmanager.services.internal;
 
 import java.util.Optional;
 
@@ -12,6 +12,7 @@ import com.barca.taskmanager.dtos.TaskCreationDto;
 import com.barca.taskmanager.dtos.TaskDto;
 import com.barca.taskmanager.models.Task;
 import com.barca.taskmanager.repositorites.TaskRepository;
+import com.barca.taskmanager.services.TaskService;
 
 import lombok.RequiredArgsConstructor;
 

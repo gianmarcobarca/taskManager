@@ -34,7 +34,7 @@ public class User { // final access will cause performance loss
   @Email
   private final String email;
   @NotNull
-  @Size(min = 8, max = 24)
+  @Size(min = 8, max = 256)
   private final String password;
   @NotNull
   private final Set<String> authorities;
