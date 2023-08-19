@@ -12,6 +12,7 @@ import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
@@ -31,6 +32,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @WebMvcTest(controllers = AuthController.class)
 @Import(AuthSecurityConfig.class)
+@ActiveProfiles("test")
 class AuthControllerSliceTest {
 
   @Autowired

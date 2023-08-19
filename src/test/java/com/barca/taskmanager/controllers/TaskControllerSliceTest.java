@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
@@ -41,6 +42,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @WebMvcTest(controllers = TaskController.class)
 @Import(TaskSecurityConfig.class)
+@ActiveProfiles("test")
 public class TaskControllerSliceTest {
 
   @Autowired
