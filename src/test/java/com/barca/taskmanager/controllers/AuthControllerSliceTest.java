@@ -58,7 +58,6 @@ class AuthControllerSliceTest {
         .andExpect(content().string(asJsonString(dto)));
 
     verify(authService).createToken(auth);
-
   }
 
   @Test

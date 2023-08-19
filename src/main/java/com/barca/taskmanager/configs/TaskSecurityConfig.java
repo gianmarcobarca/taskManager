@@ -1,9 +1,5 @@
 package com.barca.taskmanager.configs;
 
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +21,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.barca.taskmanager.configs.properties.RsaKeysProperties;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -32,13 +29,13 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration("securityConfig")
+@RequiredArgsConstructor
 public class TaskSecurityConfig {
 
-  @Value("${jwt.public.key}")
-  private RSAPublicKey PUBLIC_KEY;
-  @Value("${jwt.private.key}")
-  private RSAPrivateKey PRIVATE_KEY;
+  private final RsaKeysProperties keys;
 
   @Bean
   public SecurityFilterChain taskFilterChain(HttpSecurity http) throws Exception {
@@ -69,12 +66,12 @@ public class TaskSecurityConfig {
 
   @Bean
   public JwtDecoder jwtDecoder() {
-    return NimbusJwtDecoder.withPublicKey(PUBLIC_KEY).build();
+    return NimbusJwtDecoder.withPublicKey(keys.publicKey()).build();
   }
 
   @Bean
   public JwtEncoder jwtEncoder() {
-    JWK jwk = new RSAKey.Builder(PUBLIC_KEY).privateKey(PRIVATE_KEY).build();
+    JWK jwk = new RSAKey.Builder(keys.publicKey()).privateKey(keys.privateKey()).build();
     JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
     return new NimbusJwtEncoder(jwks);
   }
