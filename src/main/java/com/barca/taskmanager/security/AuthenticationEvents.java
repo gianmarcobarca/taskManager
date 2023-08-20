@@ -5,10 +5,10 @@ import org.springframework.security.authentication.event.AbstractAuthenticationF
 import org.springframework.security.authorization.event.AuthorizationDeniedEvent;
 import org.springframework.stereotype.Component;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 @Component("authenticationEvents")
-@Slf4j
+@Log4j2
 public class AuthenticationEvents {
   @EventListener
   public void onFailure(AbstractAuthenticationFailureEvent failure) {

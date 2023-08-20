@@ -14,4 +14,5 @@ public class TaskmanagerApplication {
 		SpringApplication.run(TaskmanagerApplication.class, args);
 	}
 
+	// TODO think about using Log4j2
 }

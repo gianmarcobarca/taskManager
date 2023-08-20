@@ -5,6 +5,6 @@ import java.security.interfaces.RSAPublicKey;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "rsa", ignoreInvalidFields = true)
+@ConfigurationProperties(prefix = "rsa")
 public record RsaKeysProperties(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
 }

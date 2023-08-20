@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.config.crypto.RsaKeyConversionServicePostProcessor;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +22,9 @@ import com.barca.taskmanager.models.Task;
 // TODO add validation tests
 
 @DataMongoTest
-@Import({ MongoConfig.class })
-@ActiveProfiles("test")
+@Import({ MongoConfig.class, RsaKeyConversionServicePostProcessor.class })
 @Transactional
+@ActiveProfiles("test")
 class TaskRepositorySliceTest {
 
   @Autowired
