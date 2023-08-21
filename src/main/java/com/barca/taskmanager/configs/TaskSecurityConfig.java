@@ -1,5 +1,6 @@
 package com.barca.taskmanager.configs;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +33,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
 
 @Configuration("securityConfig")
+@EnableConfigurationProperties(RsaKeysProperties.class)
 @RequiredArgsConstructor
 public class TaskSecurityConfig {
 

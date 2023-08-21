@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import com.barca.taskmanager.configs.properties.RsaKeysProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(RsaKeysProperties.class)
 public class TaskmanagerApplication {
 
 	public static void main(String[] args) {
