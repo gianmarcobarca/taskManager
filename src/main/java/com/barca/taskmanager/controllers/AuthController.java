@@ -14,7 +14,7 @@ import com.barca.taskmanager.annotations.Principal;
 import com.barca.taskmanager.dtos.JwtDto;
 import com.barca.taskmanager.dtos.UserCreationDto;
 import com.barca.taskmanager.security.CustomUserDetails;
-import com.barca.taskmanager.services.AuthService;
+import com.barca.taskmanager.services.TokenService;
 import com.barca.taskmanager.services.UserService;
 
 import jakarta.validation.Valid;
@@ -24,12 +24,12 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-  private final AuthService authService; // Rename to token service
+  private final TokenService tokenService; // Rename to token service
   private final UserService userService;
 
   @GetMapping("/token")
   public JwtDto getToken(@Principal UserDetails userDetails) {
-    return authService.createToken((CustomUserDetails) userDetails);
+    return tokenService.createToken((CustomUserDetails) userDetails);
   }
 
   @PostMapping("/signup")

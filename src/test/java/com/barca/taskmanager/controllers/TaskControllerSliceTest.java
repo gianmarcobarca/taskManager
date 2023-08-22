@@ -57,7 +57,6 @@ public class TaskControllerSliceTest {
     // arrange
     List<TaskDto> tasks = new ArrayList<>();
     // simulate sorting
-    // TODO check json path for simulated sorting
     tasks.add(new TaskDto("2", "Task example 2", Instant.now().plusSeconds(1)));
     tasks.add(new TaskDto("1", "Task example 1", Instant.now()));
 

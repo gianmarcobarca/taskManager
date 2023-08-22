@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 
 import com.barca.taskmanager.dtos.JwtDto;
 import com.barca.taskmanager.security.CustomUserDetails;
-import com.barca.taskmanager.services.AuthService;
+import com.barca.taskmanager.services.TokenService;
 
 import lombok.RequiredArgsConstructor;
 
-@Service("authService")
+@Service("tokenService")
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService {
+public class TokenServiceImpl implements TokenService {
   private final JwtEncoder jwtEncoder;
 
   @Override

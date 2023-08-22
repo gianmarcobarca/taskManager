@@ -15,7 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.barca.taskmanager.configs.AuthSecurityConfig;
 import com.barca.taskmanager.dtos.UserCreationDto;
-import com.barca.taskmanager.services.AuthService;
+import com.barca.taskmanager.services.TokenService;
 import com.barca.taskmanager.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,7 +35,7 @@ class AuthControllerSliceTest {
   private MockMvc mockMvc;
 
   @MockBean
-  private AuthService authService;
+  private TokenService tokenService;
   @MockBean
   private UserService userService;
 
