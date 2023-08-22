@@ -34,4 +34,8 @@ public class AuthController {
   public void signup(@RequestBody @Valid UserCreationDto dto) {
     userService.createUser(dto);
   }
+
+  // TODO changePassword
+
+  // TODO deleteAccount
 }

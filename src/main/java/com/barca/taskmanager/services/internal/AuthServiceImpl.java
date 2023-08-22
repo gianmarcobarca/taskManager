@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -37,6 +38,7 @@ public class AuthServiceImpl implements AuthService {
         .builder()
         .subject(((CustomUserDetails) auth.getPrincipal()).getId())
         .claim("name", ((CustomUserDetails) auth.getPrincipal()).getName())
+        .claim("email", ((UserDetails) auth.getPrincipal()).getUsername())
         .claim("scope", scope)
         .issuer("self")
         .issuedAt(now)
