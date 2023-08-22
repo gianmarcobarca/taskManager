@@ -17,7 +17,8 @@ public class AuthSecurityConfig {
     http.securityMatcher("/auth/**")
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.POST, "/auth/signup").permitAll()
-            .requestMatchers(HttpMethod.GET, "/auth/token").authenticated())
+            .requestMatchers(HttpMethod.GET, "/auth/token").authenticated()
+            .requestMatchers(HttpMethod.DELETE, "/auth/deregister").authenticated())
         .httpBasic(Customizer.withDefaults())
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

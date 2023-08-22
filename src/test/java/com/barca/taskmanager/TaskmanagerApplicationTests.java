@@ -88,7 +88,8 @@ class TaskmanagerApplicationTests {
 	@Order(2)
 	void createTask_and_getTasks_should_return_201_and_200() {
 
-		var taskCreationDto = new TaskCreationDto("Task example from john doe");
+		var taskCreationDto1 = new TaskCreationDto("Task example from john doe 1");
+		var taskCreationDto2 = new TaskCreationDto("Task example from john doe 2");
 		String auth = Base64.getEncoder().encodeToString("johndoe@example.com:password".getBytes());
 
 		JwtDto jwtDto = client
@@ -104,7 +105,14 @@ class TaskmanagerApplicationTests {
 		client.post().uri("/api/tasks")
 				.header("Authorization", "Bearer " + jwtDto.tokenValue())
 				.contentType(MediaType.APPLICATION_JSON)
-				.bodyValue(taskCreationDto)
+				.bodyValue(taskCreationDto1)
+				.exchange()
+				.expectStatus().isCreated();
+
+		client.post().uri("/api/tasks")
+				.header("Authorization", "Bearer " + jwtDto.tokenValue())
+				.contentType(MediaType.APPLICATION_JSON)
+				.bodyValue(taskCreationDto2)
 				.exchange()
 				.expectStatus().isCreated();
 
@@ -115,13 +123,14 @@ class TaskmanagerApplicationTests {
 				.exchange()
 				.expectStatus().isOk()
 				.expectBody()
-				.jsonPath("$.numberOfElements").isEqualTo(1)
-				.jsonPath("$.content[0].content").isEqualTo("Task example from john doe");
+				.jsonPath("$.numberOfElements").isEqualTo(2)
+				.jsonPath("$.content[0].content").isEqualTo("Task example from john doe 2")
+				.jsonPath("$.content[1].content").isEqualTo("Task example from john doe 1");
 	}
 
 	@Test
 	@Order(3)
-	void deleteTasks_and_get_tasks_should_return_204_and_200() {
+	void deleteTasks_and_getTasks_should_return_204_and_200() {
 		String auth = Base64.getEncoder().encodeToString("johndoe@example.com:password".getBytes());
 
 		JwtDto jwtDto = client
@@ -148,4 +157,50 @@ class TaskmanagerApplicationTests {
 				.expectBody()
 				.jsonPath("$.numberOfElements").isEqualTo(0);
 	}
+
+	@Test
+	@Order(4)
+	void createTask_and_deleteUser_should_return_201_and_204() {
+		String auth = Base64.getEncoder().encodeToString("johndoe@example.com:password".getBytes());
+		var taskCreationDto1 = new TaskCreationDto("Task example from john doe 1");
+
+		JwtDto jwtDto = client
+				.get().uri("/auth/token")
+				.header("Authorization", "Basic " + auth)
+				.accept(MediaType.APPLICATION_JSON)
+				.exchange()
+				.expectStatus().isOk()
+				.expectBody(JwtDto.class)
+				.returnResult()
+				.getResponseBody();
+
+		client.post().uri("/api/tasks")
+				.header("Authorization", "Bearer " + jwtDto.tokenValue())
+				.contentType(MediaType.APPLICATION_JSON)
+				.bodyValue(taskCreationDto1)
+				.exchange()
+				.expectStatus().isCreated();
+
+		client.delete().uri("/auth/deregister")
+				.header("Authorization", "Basic " + auth)
+				.exchange()
+				.expectStatus().isNoContent();
+
+		client
+				.get().uri("/api/tasks")
+				.header("Authorization", "Bearer " + jwtDto.tokenValue())
+				.accept(MediaType.APPLICATION_JSON)
+				.exchange()
+				.expectStatus().isOk()
+				.expectBody()
+				.jsonPath("$.numberOfElements").isEqualTo(0);
+
+		client
+				.get().uri("/auth/token")
+				.header("Authorization", "Basic " + auth)
+				.accept(MediaType.APPLICATION_JSON)
+				.exchange()
+				.expectStatus().isUnauthorized();
+	}
+
 }

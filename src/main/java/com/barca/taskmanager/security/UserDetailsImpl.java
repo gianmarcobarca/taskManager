@@ -18,7 +18,7 @@ import lombok.Data;
 public class UserDetailsImpl implements CustomUserDetails {
 
   // TODO: getUser should not be implemented by Lombok
-  private final User user;
+  private final transient User user;
 
   @Override
   @Nonnull

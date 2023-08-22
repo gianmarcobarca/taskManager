@@ -9,15 +9,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConversionException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.test.context.TestSecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.barca.taskmanager.configs.AuthSecurityConfig;
-import com.barca.taskmanager.dtos.JwtDto;
 import com.barca.taskmanager.dtos.UserCreationDto;
 import com.barca.taskmanager.services.AuthService;
 import com.barca.taskmanager.services.UserService;
@@ -31,7 +27,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.assertj.core.api.Assertions.*;
 
 @WebMvcTest(controllers = AuthController.class)
-@Import(AuthSecurityConfig.class)
+@Import({ AuthSecurityConfig.class })
 @ActiveProfiles("test")
 class AuthControllerSliceTest {
 
@@ -42,25 +38,6 @@ class AuthControllerSliceTest {
   private AuthService authService;
   @MockBean
   private UserService userService;
-
-  @Test
-  @WithMockUser(username = "username", password = "password")
-  void getToken_should_return_200() throws Exception {
-
-    JwtDto dto = new JwtDto("Token Example");
-    Authentication auth = TestSecurityContextHolder.getContext().getAuthentication();
-
-    given(authService.createToken(auth)).willReturn(dto);
-
-    mockMvc
-        .perform(get("/auth/token"))
-        .andDo(print())
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(content().string(asJsonString(dto)));
-
-    verify(authService).createToken(auth);
-  }
 
   @Test
   void getToken_should_return_401() throws Exception {
