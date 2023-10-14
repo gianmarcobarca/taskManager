@@ -11,13 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.barca.taskmanager.dtos.TaskCreationDto;
 import com.barca.taskmanager.dtos.TaskDto;
 import com.barca.taskmanager.models.Task;
-import com.barca.taskmanager.repositorites.TaskRepository;
+import com.barca.taskmanager.repositories.TaskRepository;
 import com.barca.taskmanager.services.TaskService;
 
 import lombok.RequiredArgsConstructor;
 
 @Service("taskService")
-@Transactional
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
 
@@ -28,6 +27,7 @@ public class TaskServiceImpl implements TaskService {
     taskRepository.save(Task.of(dto.content(), userId));
   }
 
+  @Transactional
   @Override
   public Page<TaskDto> getUserTasks(String userId, Pageable pageable) {
     return taskRepository.findAllByUserId(userId, pageable);
@@ -44,6 +44,7 @@ public class TaskServiceImpl implements TaskService {
     taskRepository.deleteById(taskId);
   }
 
+  @Transactional
   @Override
   public void deleteUserTasks(String userId) {
     taskRepository.deleteAllByUserId(userId);

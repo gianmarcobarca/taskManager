@@ -28,5 +28,7 @@ class IndexControllerTest {
     mockMvc.perform(get("/"))
         .andDo(print())
         .andExpect(status().isOk());
+
+    // TODO assert JsonPath
   }
 }

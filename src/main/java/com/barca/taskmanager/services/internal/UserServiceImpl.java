@@ -9,15 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.barca.taskmanager.dtos.UserCreationDto;
 import com.barca.taskmanager.models.User;
-import com.barca.taskmanager.repositorites.TaskRepository;
-import com.barca.taskmanager.repositorites.UserRepository;
+import com.barca.taskmanager.repositories.TaskRepository;
+import com.barca.taskmanager.repositories.UserRepository;
 import com.barca.taskmanager.security.UserDetailsImpl;
 import com.barca.taskmanager.services.UserService;
 
 import lombok.RequiredArgsConstructor;
 
 @Service("userService")
-@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
   private final UserRepository userRepository;
@@ -43,6 +42,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     userRepository.save(copy);
   }
 
+  @Transactional
   @Override
   public void deleteUser(String userId) {
 

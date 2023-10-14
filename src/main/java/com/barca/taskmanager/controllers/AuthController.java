@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-  private final TokenService tokenService; // Rename to token service
+  private final TokenService tokenService;
   private final UserService userService;
 
   @GetMapping("/token")

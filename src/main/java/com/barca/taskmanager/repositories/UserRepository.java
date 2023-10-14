@@ -1,4 +1,4 @@
-package com.barca.taskmanager.repositorites;
+package com.barca.taskmanager.repositories;
 
 import java.util.Optional;
 

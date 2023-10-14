@@ -22,8 +22,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import com.barca.taskmanager.dtos.JwtDto;
 import com.barca.taskmanager.dtos.TaskCreationDto;
 import com.barca.taskmanager.dtos.UserCreationDto;
-import com.barca.taskmanager.repositorites.TaskRepository;
-import com.barca.taskmanager.repositorites.UserRepository;
+import com.barca.taskmanager.repositories.TaskRepository;
+import com.barca.taskmanager.repositories.UserRepository;
 
 import static org.assertj.core.api.Assertions.*;
 

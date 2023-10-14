@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.barca.taskmanager.configs.MongoConfig;
 import com.barca.taskmanager.models.User;
+import com.barca.taskmanager.repositories.UserRepository;
 
 // TODO add validation tests
 
